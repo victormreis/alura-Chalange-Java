@@ -43,4 +43,10 @@ public class DepoimentoService {
     public void deleteDepoimento(Long id) {
         depoimentoRepository.deleteById(id);
     }
+
+
+    public List<Depoimento> getRandomDepoimento() {
+        return depoimentoRepository.findRandomDepoimento();
+    }
+
 }

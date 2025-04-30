@@ -58,4 +58,9 @@ public class DepoimentoController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/home")
+    public ResponseEntity getRandomDepoimentos() {
+        return ResponseEntity.ok(depoimentoService.getRandomDepoimento().stream().map(DepoimentosDTO::new));
+    }
 }
