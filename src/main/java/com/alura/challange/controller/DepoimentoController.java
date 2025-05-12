@@ -3,7 +3,6 @@ package com.alura.challange.controller;
 import com.alura.challange.model.Depoimento;
 import com.alura.challange.records.DepoimentosDTO;
 import com.alura.challange.service.DepoimentoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
