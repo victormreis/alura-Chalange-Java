@@ -13,8 +13,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/depoimentos")
 public class DepoimentoController {
 
-    @Autowired
-    private DepoimentoService depoimentoService;
+    private final DepoimentoService depoimentoService;
+
+
+    public DepoimentoController(DepoimentoService depoimentoService) {
+        this.depoimentoService = depoimentoService;
+    }
+
+
 
     @GetMapping
     public ResponseEntity getDepoimentos() {
