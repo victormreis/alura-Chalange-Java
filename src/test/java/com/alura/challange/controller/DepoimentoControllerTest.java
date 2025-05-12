@@ -13,11 +13,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,14 +85,40 @@ class DepoimentoControllerTest {
     }
 
     @Test
-    void createDepoimento() {
+    @DisplayName("Should return status code 200 when a testimony was created")
+    void createDepoimento() throws Exception {
+        var depoimentoDto = new DepoimentosDTO(1l, "test", "Depoimento", "Autor");
+        var depoimento = new Depoimento(1L, "Depoimento", "Autor", "test att");
+
+        doNothing().when(depoimentoService).createDepoimento(any(Depoimento.class));
+
+        mockMvc.perform(post("/depoimentos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jacksonTester.write(depoimentoDto).getJson()))
+                .andExpect(status().isCreated());
     }
 
     @Test
-    void deleteDepoimento() {
+    @DisplayName("Should return status code 204 when a testimony was deleted")
+    void deleteDepoimento() throws Exception {
+
+        doNothing().when(depoimentoService).deleteDepoimento(1l);
+
+        mockMvc.perform(delete("/depoimentos/{id}", 1l)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
     }
 
     @Test
-    void getRandomDepoimentos() {
+    @DisplayName("Should return status code 200 with a list of testimony when called")
+    void getRandomDepoimentos() throws Exception {
+        var depoimento = new Depoimento(1l, "Depoimento", "Autor", "foto");
+
+        when(depoimentoService.getRandomDepoimento()).thenReturn(List.of(depoimento));
+
+        mockMvc.perform(get("/depoimentos/home").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].autor").value("Autor"));;
     }
 }
