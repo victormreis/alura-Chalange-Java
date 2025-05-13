@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/destinos")
@@ -21,9 +22,12 @@ public class DestinosController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DestinosDTO>> getDestinos() {
-
-        return ResponseEntity.ok(destinoService.getDestinos());
+    public ResponseEntity getDestinos(@RequestParam(defaultValue = "") String nome) {
+        var destinos = destinoService.getDestinos(nome);
+        if(destinos.isEmpty()) {
+            return ResponseEntity.ok(Map.of("mensagem", "Nenhum destino foi encontrado"));
+        }
+        return ResponseEntity.ok(destinos);
     }
 
     @GetMapping("/{id}")

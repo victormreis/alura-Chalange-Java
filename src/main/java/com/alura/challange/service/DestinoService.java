@@ -18,7 +18,11 @@ public class DestinoService {
     }
 
 
-    public List<DestinosDTO> getDestinos() {
+    public List<DestinosDTO> getDestinos(String nome) {
+
+        if(nome != null && !nome.isBlank()) {
+            return getDestinosByName(nome);
+        }
 
         return destinosRepository.findAll().stream().map(DestinosDTO::new).toList();
 
