@@ -33,7 +33,7 @@ public class DestinoService {
 
     public void createDestino(Destino destino) {
 
-         destinosRepository.save(destino);
+        destinosRepository.save(destino);
 
     }
 
@@ -43,8 +43,8 @@ public class DestinoService {
                     d.updateDestino(destinosDTO);
                     return d;
                 })
-                .orElseThrow(()-> new ErrorHandlingValidation("Id " +
-                "invalid"));
+                .orElseThrow(() -> new ErrorHandlingValidation("Id " +
+                        "invalid"));
     }
 
     public void deleteDestino(Long id) {
@@ -52,5 +52,12 @@ public class DestinoService {
         var destino = destinosRepository.findById(id).orElseThrow(() -> new ErrorHandlingValidation("id not found!"));
 
         destino.deleteDestino();
+    }
+
+    public List<DestinosDTO> getDestinosByName(String nome) {
+        var destinosDto = destinosRepository.buscaDestinoPorNome(nome).stream().map(d ->
+                new DestinosDTO(d)).toList();
+
+        return destinosDto;
     }
 }
