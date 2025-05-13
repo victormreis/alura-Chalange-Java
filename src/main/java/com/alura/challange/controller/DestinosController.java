@@ -68,13 +68,4 @@ public class DestinosController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<DestinosDTO>> SearchDestinosByName(@RequestParam(defaultValue = "") String nome) {
-
-        System.out.println("Chamou" + nome);
-
-        var destinos = destinoService.getDestinosByName(nome);
-
-        return ResponseEntity.ok(destinos);
-    }
 }
