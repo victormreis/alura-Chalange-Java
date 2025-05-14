@@ -4,6 +4,7 @@ import com.alura.challange.model.Destino;
 import com.alura.challange.records.DestinosDTO;
 import com.alura.challange.service.DestinoService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -38,7 +39,8 @@ public class DestinosController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<DestinosDTO> createDestino(@RequestBody DestinosDTO destinoDTO, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<DestinosDTO> createDestino(@Valid @RequestBody DestinosDTO destinoDTO,
+                                                     UriComponentsBuilder uriBuilder) {
 
         var destino = new Destino(destinoDTO);
 
