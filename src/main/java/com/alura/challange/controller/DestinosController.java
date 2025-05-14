@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,7 +24,7 @@ public class DestinosController {
     @GetMapping
     public ResponseEntity getDestinos(@RequestParam(defaultValue = "") String nome) {
         var destinos = destinoService.getDestinos(nome);
-        if(destinos.isEmpty()) {
+        if (destinos.isEmpty()) {
             return ResponseEntity.ok(Map.of("mensagem", "Nenhum destino foi encontrado"));
         }
         return ResponseEntity.ok(destinos);
@@ -65,7 +64,7 @@ public class DestinosController {
 
     public ResponseEntity deleteDestino(@PathVariable Long id) {
 
-         destinoService.deleteDestino(id);
+        destinoService.deleteDestino(id);
 
         return ResponseEntity.noContent().build();
     }
