@@ -142,6 +142,14 @@ class DestinosControllerTest {
     }
 
     @Test
-    void deleteDestino() {
+    @DisplayName("Should return status code 200 when a destiny was deleted")
+    void deleteDestino() throws Exception {
+
+        doNothing().when(destinoService).deleteDestino(1l);
+
+        mockMvc.perform(delete("/destinos/{id}", 1l)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
     }
 }
