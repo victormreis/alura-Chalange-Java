@@ -14,13 +14,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,7 +107,38 @@ class DestinosControllerTest {
     }
 
     @Test
-    void updateDestino() {
+    @DisplayName("Should return status code 200 when a destiny was updated")
+    void updateDestino() throws Exception {
+        var destinoDTO = new DestinosDTO(1l, "Foto", "nome", 599.97);
+        var destino = new Destino(1l, "Foto att", "nome att", 699.97, true);
+
+        when(destinoService.updateDestino(destinoDTO)).thenReturn(destino);
+
+        mockMvc.perform(put("/destinos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jacksonTester.write(destinoDTO).getJson()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.foto").value("Foto att"));
+
+
+
+    }
+
+    @Test
+    @DisplayName("Should return status code 400 when invalid id was informed")
+    void updateDestinoFail() throws Exception {
+        var destinoDTO = new DestinosDTO(1l, "Foto", "nome", 599.97);
+
+        when(destinoService.updateDestino(destinoDTO)).thenThrow(new ErrorHandlingValidation("Invalid ID!"));
+
+        mockMvc.perform(put("/destinos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jacksonTester.write(destinoDTO).getJson()))
+                .andExpect(status().isBadRequest());
+
+
+
     }
 
     @Test
