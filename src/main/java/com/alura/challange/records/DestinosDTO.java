@@ -6,15 +6,17 @@ import jakarta.validation.constraints.NotNull;
 
 public record DestinosDTO(
         Long id,
-        String foto,
+        String foto1,
+        String foto2,
         @NotBlank
         String nome,
         @NotNull
-        Double preco) {
+        Double preco,
+        String textoDescritivo) {
 
 
     public DestinosDTO(Destino destino) {
-        this(destino.getId(),destino.getFoto(), destino.getNome(), destino.getPreco());
+        this(destino.getId(),destino.getFoto1(), destino.getFoto2(), destino.getNome(), destino.getPreco(), destino.getTextoDescritivo());
     }
 
 }

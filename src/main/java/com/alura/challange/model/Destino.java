@@ -21,22 +21,30 @@ public class Destino {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String foto;
+    private String foto1;
+    private String foto2;
     private String nome;
     private Double preco;
+    private String textoDescritivo;
     private Boolean ativo;
 
     public Destino(DestinosDTO destinoDTO) {
-        this.foto = destinoDTO.foto();
+        this.id = destinoDTO.id();
+        this.foto1 = destinoDTO.foto1();
+        this.foto2 = destinoDTO.foto2();
         this.nome = destinoDTO.nome();
         this.preco = destinoDTO.preco();
+        this.textoDescritivo = destinoDTO.textoDescritivo();
         this.ativo = true;
     }
 
     public void updateDestino(DestinosDTO destino) {
 
-        if(destino.foto() != null) {
-            this.foto = destino.foto();
+        if(destino.foto1() != null) {
+            this.foto1 = destino.foto1();
+        }
+        if(destino.foto2() != null) {
+            this.foto2 = destino.foto2();
         }
 
         if(destino.preco() != null) {
@@ -45,6 +53,10 @@ public class Destino {
 
         if(destino.nome() != null) {
             this.nome = destino.nome();
+        }
+
+        if(destino.textoDescritivo() != null) {
+            this.textoDescritivo = destino.textoDescritivo();
         }
 
     }
