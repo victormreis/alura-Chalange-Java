@@ -24,7 +24,7 @@ public class Destino {
     private String foto1;
     private String foto2;
     private String nome;
-    private Double preco;
+//    private Double preco;
     private String textoDescritivo;
     private Boolean ativo;
 
@@ -33,7 +33,7 @@ public class Destino {
         this.foto1 = destinoDTO.foto1();
         this.foto2 = destinoDTO.foto2();
         this.nome = destinoDTO.nome();
-        this.preco = destinoDTO.preco();
+//        this.preco = destinoDTO.preco();
         this.textoDescritivo = destinoDTO.textoDescritivo();
         this.ativo = true;
     }
@@ -47,9 +47,9 @@ public class Destino {
             this.foto2 = destino.foto2();
         }
 
-        if(destino.preco() != null) {
-            this.preco = destino.preco();
-        }
+//        if(destino.preco() != null) {
+//            this.preco = destino.preco();
+//        }
 
         if(destino.nome() != null) {
             this.nome = destino.nome();

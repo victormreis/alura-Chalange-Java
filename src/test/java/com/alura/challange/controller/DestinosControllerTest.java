@@ -41,7 +41,7 @@ class DestinosControllerTest {
     @Test
     @DisplayName("Should Return status code 200 when called")
     void getDestinos() throws Exception {
-        var destino = new DestinosDTO(1l, "Foto","Foto", "nome", 599.97, "Texto descritivo");
+        var destino = new DestinosDTO(1l, "Foto","Foto", "nome",  "Texto descritivo");
 
         when(destinoService.getDestinos("")).thenReturn(List.of(destino));
 
@@ -55,7 +55,7 @@ class DestinosControllerTest {
     @Test
     @DisplayName("Should Return status code 200 when id is found")
     void getDestinoById() throws Exception {
-        var destino = new DestinosDTO(1l, "Foto","Foto", "nome", 599.97, "Texto descritivo");
+        var destino = new DestinosDTO(1l, "Foto","Foto", "nome", "Texto descritivo");
 
         when(destinoService.getDestinoById(1l)).thenReturn((destino));
 
@@ -68,7 +68,7 @@ class DestinosControllerTest {
     @Test
     @DisplayName("Should Return status code 400 when id is not found")
     void getDestinoByIdFail() throws Exception {
-        var destino = new DestinosDTO(1l, "Foto","Foto", "nome", 599.97, "Texto descritivo");
+        var destino = new DestinosDTO(1l, "Foto","Foto", "nome",  "Texto descritivo");
 
         when(destinoService.getDestinoById(10L))
                 .thenThrow(new ErrorHandlingValidation("Id not found!"));
@@ -81,8 +81,8 @@ class DestinosControllerTest {
     @Test
     @DisplayName("Should return Status code 200 when a new destiny was created")
     void createDestino() throws Exception {
-        var destinoDTO = new DestinosDTO(1l, "Foto", "Foto", "nome", 599.97, "texto descritivo");
-        var destino = new DestinosDTO(1l, "Foto","Foto", "nome", 599.97, "Texto descritivo");
+        var destinoDTO = new DestinosDTO(1l, "Foto", "Foto", "nome",  "texto descritivo");
+        var destino = new DestinosDTO(1l, "Foto","Foto", "nome",  "Texto descritivo");
 
         doNothing().when(destinoService).createDestino(any(Destino.class));
 
@@ -109,7 +109,7 @@ class DestinosControllerTest {
     @Test
     @DisplayName("Should return status code 200 when a destiny was updated")
     void updateDestino() throws Exception {
-        var destinoDTO = new DestinosDTO(1L, "FotoAtualizada1", "FotoAtualizada2", "Destino Atualizado", 1234.56, "Texto atualizado");
+        var destinoDTO = new DestinosDTO(1L, "FotoAtualizada1", "FotoAtualizada2", "Destino Atualizado",  "Texto atualizado");
         var destino = new Destino(destinoDTO);
 
         when(destinoService.updateDestino(destinoDTO)).thenReturn(destino);
@@ -122,7 +122,6 @@ class DestinosControllerTest {
                 .andExpect(jsonPath("$.foto1").value("FotoAtualizada1"))
                 .andExpect(jsonPath("$.foto2").value("FotoAtualizada2"))
                 .andExpect(jsonPath("$.nome").value("Destino Atualizado"))
-                .andExpect(jsonPath("$.preco").value(1234.56))
                 .andExpect(jsonPath("$.textoDescritivo").value("Texto atualizado"));
 
 
@@ -132,7 +131,7 @@ class DestinosControllerTest {
     @Test
     @DisplayName("Should return status code 400 when invalid id was informed")
     void updateDestinoFail() throws Exception {
-        var destinoDTO = new DestinosDTO(1l, "Foto","Foto",  "nome", 599.97, "texto Descritivo");
+        var destinoDTO = new DestinosDTO(1l, "Foto","Foto",  "nome",  "texto Descritivo");
 
         when(destinoService.updateDestino(destinoDTO)).thenThrow(new ErrorHandlingValidation("Invalid ID!"));
 

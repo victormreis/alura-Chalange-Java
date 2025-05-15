@@ -10,13 +10,13 @@ public record DestinosDTO(
         String foto2,
         @NotBlank
         String nome,
-        @NotNull
-        Double preco,
+//        @NotNull
+//        Double preco,
         String textoDescritivo) {
 
 
     public DestinosDTO(Destino destino) {
-        this(destino.getId(),destino.getFoto1(), destino.getFoto2(), destino.getNome(), destino.getPreco(), destino.getTextoDescritivo());
+        this(destino.getId(),destino.getFoto1(), destino.getFoto2(), destino.getNome(), destino.getTextoDescritivo());
     }
 
 }
