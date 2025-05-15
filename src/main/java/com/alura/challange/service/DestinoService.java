@@ -12,9 +12,11 @@ import java.util.List;
 public class DestinoService {
 
     private final DestinosRepository destinosRepository;
+    private final GeminiService aiService;
 
-    public DestinoService(DestinosRepository destinosRepository) {
+    public DestinoService(DestinosRepository destinosRepository, GeminiService geminiService) {
         this.destinosRepository = destinosRepository;
+        this.aiService = geminiService;
     }
 
 
@@ -37,14 +39,23 @@ public class DestinoService {
 
     public void createDestino(Destino destino) {
 
+        if(destino.getTextoDescritivo().isEmpty()) {
+            destino.setTextoDescritivo(aiService.generateDescription(destino.getNome()));
+        }
+
         destinosRepository.save(destino);
 
     }
 
     public Destino updateDestino(DestinosDTO destinosDTO) {
 
+
+
         return destinosRepository.findById(destinosDTO.id()).map(d -> {
                     d.updateDestino(destinosDTO);
+                    if(destinosDTO.textoDescritivo() != null && destinosDTO.textoDescritivo().isEmpty()) {
+                        d.setTextoDescritivo(aiService.generateDescription(d.getNome()));
+                    }
                     return d;
                 })
                 .orElseThrow(() -> new ErrorHandlingValidation("Id " +

@@ -2,10 +2,12 @@ package com.alura.challange.model;
 
 import com.alura.challange.records.DestinosDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "destinos")
@@ -16,16 +18,21 @@ import lombok.NoArgsConstructor;
 public class Destino {
 
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String foto1;
+
     private String foto2;
+
     private String nome;
-//    private Double preco;
+
+    //    private Double preco;
+    @Column(length = 512)
+    @Size(max = 512)
     private String textoDescritivo;
+
     private Boolean ativo;
 
     public Destino(DestinosDTO destinoDTO) {
@@ -40,10 +47,10 @@ public class Destino {
 
     public void updateDestino(DestinosDTO destino) {
 
-        if(destino.foto1() != null) {
+        if (destino.foto1() != null) {
             this.foto1 = destino.foto1();
         }
-        if(destino.foto2() != null) {
+        if (destino.foto2() != null) {
             this.foto2 = destino.foto2();
         }
 
@@ -51,11 +58,11 @@ public class Destino {
 //            this.preco = destino.preco();
 //        }
 
-        if(destino.nome() != null) {
+        if (destino.nome() != null) {
             this.nome = destino.nome();
         }
 
-        if(destino.textoDescritivo() != null) {
+        if (destino.textoDescritivo() != null) {
             this.textoDescritivo = destino.textoDescritivo();
         }
 
@@ -64,5 +71,9 @@ public class Destino {
     public void deleteDestino() {
         this.ativo = false;
 
+    }
+
+    public void setTextoDescritivo(String textoDescritivo) {
+        this.textoDescritivo = textoDescritivo;
     }
 }
