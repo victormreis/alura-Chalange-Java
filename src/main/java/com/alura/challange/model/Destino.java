@@ -43,6 +43,7 @@ public class Destino {
         this.ativo = true;
     }
 
+
     public void updateDestino(DestinosDTO destino) {
 
         if (destino.foto1() != null) {

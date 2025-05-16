@@ -2,6 +2,7 @@ package com.alura.challange.controller;
 
 import com.alura.challange.records.DestinosDTO;
 import com.alura.challange.records.DestinosDTORequest;
+import com.alura.challange.records.DestinosUpdateRequest;
 import com.alura.challange.service.DestinoService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
@@ -57,11 +58,17 @@ public class DestinosController {
 
     @Transactional
     @PutMapping
-    public ResponseEntity<DestinosDTO> updateDestino(@RequestBody DestinosDTO destinosDTOResponse) {
+    public ResponseEntity<DestinosDTO> updateDestino(
+            @RequestParam("id") Long id,
+            @RequestParam(value = "nome", required = false) String nome,
+            @RequestParam(value = "textoDescritivo", required = false) String textoDescritivo,
+            @RequestParam(value = "foto1", required = false) MultipartFile foto1,
+            @RequestParam(value = "foto2", required = false) MultipartFile foto2
+    ) throws IOException {
 
-        var destino = destinoService.updateDestino(destinosDTOResponse);
-
-        return ResponseEntity.ok(new DestinosDTO(destino));
+        var request = new DestinosUpdateRequest(id, nome, textoDescritivo, foto1, foto2);
+        var destinoAtualizado = destinoService.updateDestino(request);
+        return ResponseEntity.ok(new DestinosDTO(destinoAtualizado));
     }
 
     @Transactional
