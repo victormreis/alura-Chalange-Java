@@ -3,6 +3,7 @@ package com.alura.challange.controller;
 import com.alura.challange.config.errorHandling.ErrorHandlingValidation;
 import com.alura.challange.model.Destino;
 import com.alura.challange.records.DestinosDTO;
+import com.alura.challange.records.DestinosDTORequest;
 import com.alura.challange.service.DestinoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
@@ -79,31 +81,32 @@ class DestinosControllerTest {
     }
 
     @Test
-    @DisplayName("Should return Status code 200 when a new destiny was created")
+    @DisplayName("Should return Status code 201 when a new destination was created")
     void createDestino() throws Exception {
-        var destinoDTO = new DestinosDTO(1l, "Foto", "Foto", "nome",  "texto descritivo");
-        var destino = new DestinosDTO(1l, "Foto","Foto", "nome",  "Texto descritivo");
+        MockMultipartFile foto1 = new MockMultipartFile("foto1", "foto1.png", "image/png", "fake-image-1".getBytes());
+        MockMultipartFile foto2 = new MockMultipartFile("foto2", "foto2.png", "image/png", "fake-image-2".getBytes());
 
-        doNothing().when(destinoService).createDestino(any(Destino.class));
+        var destino = new Destino();
+        destino.setId(1L);
+        destino.setNome("Destino Teste");
 
-        mockMvc.perform(post("/destinos")
-                .contentType(MediaType.APPLICATION_JSON)
-                        .content(jacksonTester.write(destinoDTO).getJson()))
-                .andExpect(status().isCreated());
+        when(destinoService.createDestino(any(DestinosDTORequest.class))).thenReturn(destino);
 
+        mockMvc.perform(multipart("/destinos")
+                .file(foto1)
+                .file(foto2)
+                .param("nome", "Destino teste")
+                .param("textoDescritivo", "Descricao teste" )
+        ).andExpect(status().isCreated());
     }
 
     @Test
-    @DisplayName("Should return Status code 400 when invalid json was inserted")
+    @DisplayName("Should return Status code 400 when invalid request was inserted")
     void createDestinoFail() throws Exception {
 
-
-        doNothing().when(destinoService).createDestino(any(Destino.class));
-
-        mockMvc.perform(post("/destinos")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-
+        mockMvc.perform(multipart("/destinos")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
