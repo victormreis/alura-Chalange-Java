@@ -3,15 +3,13 @@ package com.alura.challange.model;
 import com.alura.challange.records.DestinosDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "destinos")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -53,10 +51,6 @@ public class Destino {
         if (destino.foto2() != null) {
             this.foto2 = destino.foto2();
         }
-
-//        if(destino.preco() != null) {
-//            this.preco = destino.preco();
-//        }
 
         if (destino.nome() != null) {
             this.nome = destino.nome();
