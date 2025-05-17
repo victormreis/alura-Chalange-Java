@@ -1,6 +1,7 @@
 package com.alura.challange.controller;
 
 import com.alura.challange.model.Depoimento;
+import com.alura.challange.model.Destino;
 import com.alura.challange.records.DepoimentosDTO;
 import com.alura.challange.service.DepoimentoService;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +40,7 @@ class DepoimentoControllerTest {
     @Test
     @DisplayName("Should return status code 200 when called")
     void getDepoimentos() throws Exception {
-        var depoimentoDto = new DepoimentosDTO(null, "test", "Depoimento", "Autor");
+        var depoimentoDto = new DepoimentosDTO(null, "test", "Depoimento", "Autor", 1l);
 
         when(depoimentoService.listarDepoimentos()).thenReturn(List.of(depoimentoDto));
 
@@ -53,7 +54,7 @@ class DepoimentoControllerTest {
     @Test
     @DisplayName("Should Return status code 200 when find a testimony by a valid id")
     void getDepoimentoById() throws Exception {
-        var depoimentoDto = new DepoimentosDTO(1L, "test", "Depoimento", "Autor");
+        var depoimentoDto = new DepoimentosDTO(1L, "test", "Depoimento", "Autor", 1l);
 
         when(depoimentoService.getDepoimentoById(1l)).thenReturn(depoimentoDto);
 
@@ -67,9 +68,12 @@ class DepoimentoControllerTest {
     @Test
     @DisplayName("Should return status code")
     void updateDepoimento() throws Exception {
-        var depoimentoDto = new DepoimentosDTO(1l, "test", "Depoimento", "Autor");
+        var depoimentoDto = new DepoimentosDTO(1l, "test", "Depoimento", "Autor", 1l);
 
-        var depoimento = new Depoimento(1L, "Depoimento", "Autor", "test att");
+        var destino = new Destino();
+        destino.setId(1l);
+
+        var depoimento = new Depoimento(1L, "Depoimento", "Autor", "test att", destino);
 
 
         when(depoimentoService.updateDepoimento(depoimentoDto)).thenReturn(depoimento);
@@ -86,10 +90,14 @@ class DepoimentoControllerTest {
     @Test
     @DisplayName("Should return status code 200 when a testimony was created")
     void createDepoimento() throws Exception {
-        var depoimentoDto = new DepoimentosDTO(1l, "test", "Depoimento", "Autor");
-        var depoimento = new Depoimento(1L, "Depoimento", "Autor", "test att");
+        var destino = new Destino();
+        destino.setId(1l);
 
-        doNothing().when(depoimentoService).createDepoimento(any(Depoimento.class));
+        var depoimentoDto = new DepoimentosDTO(1l, "test", "Depoimento", "Autor", 1l);
+
+        var depoimento = new Depoimento(1L, "Depoimento", "Autor", "test att", destino);
+
+        when(depoimentoService.createDepoimento(depoimentoDto)).thenReturn(depoimento);
 
         mockMvc.perform(post("/depoimentos")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +120,10 @@ class DepoimentoControllerTest {
     @Test
     @DisplayName("Should return status code 200 with a list of testimony when called")
     void getRandomDepoimentos() throws Exception {
-        var depoimento = new Depoimento(1l, "Depoimento", "Autor", "foto");
+        var destino = new Destino();
+        destino.setId(1l);
+
+        var depoimento = new Depoimento(1l, "Depoimento", "Autor", "foto",destino);
 
         when(depoimentoService.getRandomDepoimento()).thenReturn(List.of(depoimento));
 
