@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Entity
 @Table(name = "destinos")
 @Getter
@@ -32,6 +34,9 @@ public class Destino {
     private String textoDescritivo;
 
     private Boolean ativo;
+
+    @OneToMany(mappedBy = "destino", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Depoimento> depoimentos;
 
     public Destino(DestinosDTO destinoDTO) {
         this.id = destinoDTO.id();

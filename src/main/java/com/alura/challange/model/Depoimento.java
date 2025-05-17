@@ -2,14 +2,12 @@ package com.alura.challange.model;
 
 import com.alura.challange.records.DepoimentosDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "depoimentos")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -20,6 +18,10 @@ public class Depoimento {
     private String depoimento;
     private String autor;
     private String foto;
+
+    @ManyToOne
+    @JoinColumn(name = "destino_id", nullable = false)
+    private Destino destino;
 
     public Depoimento(DepoimentosDTO depoimento) {
         this.depoimento = depoimento.depoimento();

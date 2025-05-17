@@ -1,8 +1,10 @@
 package com.alura.challange.service;
 
+import com.alura.challange.config.errorHandling.ErrorHandlingValidation;
 import com.alura.challange.model.Depoimento;
 import com.alura.challange.records.DepoimentosDTO;
 import com.alura.challange.repository.DepoimentoRepository;
+import com.alura.challange.repository.DestinosRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class DepoimentoService {
 
     @Autowired
     private DepoimentoRepository depoimentoRepository;
+
+    @Autowired
+    private DestinosRepository destinosRepository;
 
 
     public List<DepoimentosDTO> listarDepoimentos() {
@@ -36,8 +41,13 @@ public class DepoimentoService {
         }).orElseThrow(() -> new EntityNotFoundException("Depoimento não encontrado! "));
     }
 
-    public void createDepoimento(Depoimento depoimento) {
-        depoimentoRepository.save(depoimento);
+    public Depoimento createDepoimento(DepoimentosDTO dto) {
+        var destino = destinosRepository.findById(dto.id()).orElseThrow(() -> new ErrorHandlingValidation("Id not " +
+                "Found!"));
+
+        var depoimento = new Depoimento(dto);
+        depoimento.setDestino(destino);
+        return depoimentoRepository.save(depoimento);
     }
 
     public void deleteDepoimento(Long id) {
