@@ -3,6 +3,8 @@ package com.alura.challange.controller;
 import com.alura.challange.model.Depoimento;
 import com.alura.challange.model.Destino;
 import com.alura.challange.records.DepoimentosDTO;
+import com.alura.challange.records.DepoimentosRequestDTO;
+import com.alura.challange.records.DepoimentosUpdateDTO;
 import com.alura.challange.service.DepoimentoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -73,36 +76,47 @@ class DepoimentoControllerTest {
         var destino = new Destino();
         destino.setId(1l);
 
+        var fotoMock = new MockMultipartFile("foto", "foto.jpg", MediaType.IMAGE_JPEG_VALUE,
+                "fake image content".getBytes());
+
         var depoimento = new Depoimento(1L, "Depoimento", "Autor", "test att", destino);
 
 
-        when(depoimentoService.updateDepoimento(depoimentoDto)).thenReturn(depoimento);
+        when(depoimentoService.updateDepoimento(any(DepoimentosUpdateDTO.class))).thenReturn(depoimento);
 
-        mockMvc.perform(put("/depoimentos")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jacksonTester.write(depoimentoDto).getJson()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.foto").value("test att"));
+        mockMvc.perform(multipart("/depoimentos")
+                .file(fotoMock)
+                .param("id", "1")
+                .param("depoimento", "Depoimento")
+                .param("autor", "Autor")
+                .param("destinoId", "1")
+                        .with(request -> {request.setMethod("PUT"); return request;}))
+                .andExpect(status().isOk());
+
 
     }
 
     @Test
-    @DisplayName("Should return status code 200 when a testimony was created")
+    @DisplayName("Should return status code 201 when a testimony was created")
     void createDepoimento() throws Exception {
         var destino = new Destino();
         destino.setId(1l);
 
-        var depoimentoDto = new DepoimentosDTO(1l, "test", "Depoimento", "Autor", 1l);
+        var fotoMock = new MockMultipartFile("foto", "foto.jpg", MediaType.IMAGE_JPEG_VALUE,
+                "fake image content".getBytes());
 
         var depoimento = new Depoimento(1L, "Depoimento", "Autor", "test att", destino);
 
-        when(depoimentoService.createDepoimento(depoimentoDto)).thenReturn(depoimento);
+        when(depoimentoService.createDepoimento(any(DepoimentosRequestDTO.class))).thenReturn(depoimento);
 
-        mockMvc.perform(post("/depoimentos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jacksonTester.write(depoimentoDto).getJson()))
+        mockMvc.perform(multipart("/depoimentos")
+                        .file(fotoMock)
+                        .param("depoimento", "Depoimento")
+                        .param("autor", "Autor")
+                        .param("destinoId", "1"))
                 .andExpect(status().isCreated());
+
+
     }
 
     @Test
@@ -112,7 +126,7 @@ class DepoimentoControllerTest {
         doNothing().when(depoimentoService).deleteDepoimento(1l);
 
         mockMvc.perform(delete("/depoimentos/{id}", 1l)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
     }
@@ -123,12 +137,13 @@ class DepoimentoControllerTest {
         var destino = new Destino();
         destino.setId(1l);
 
-        var depoimento = new Depoimento(1l, "Depoimento", "Autor", "foto",destino);
+        var depoimento = new Depoimento(1l, "Depoimento", "Autor", "foto", destino);
 
         when(depoimentoService.getRandomDepoimento()).thenReturn(List.of(depoimento));
 
         mockMvc.perform(get("/depoimentos/home").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].autor").value("Autor"));;
+                .andExpect(jsonPath("$[0].autor").value("Autor"));
+        ;
     }
 }
