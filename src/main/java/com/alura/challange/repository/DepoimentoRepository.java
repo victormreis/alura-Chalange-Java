@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface DepoimentoRepository extends JpaRepository <Depoimento, Long> {
 
-    @Query(value = "SELECT * FROM depoimentos ORDER BY rand() LIMIT 3;", nativeQuery = true)
+    @Query(value = "SELECT * FROM depoimentos ORDER BY random() LIMIT 3", nativeQuery = true)
     public List<Depoimento> findRandomDepoimento();
 }
