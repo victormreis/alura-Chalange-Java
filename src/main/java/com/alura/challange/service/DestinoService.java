@@ -50,11 +50,11 @@ public class DestinoService {
         String foto2Url = "";
 
 
-        if (!dto.foto1().isEmpty()) {
+        if (dto.foto1() != null && !dto.foto1().isEmpty()) {
             foto1Url = s3Service.uploadFile(dto.foto1());
         }
 
-        if (!dto.foto2().isEmpty()) {
+        if (dto.foto2() != null && !dto.foto2().isEmpty()) {
             foto2Url = s3Service.uploadFile(dto.foto2());
         }
 
