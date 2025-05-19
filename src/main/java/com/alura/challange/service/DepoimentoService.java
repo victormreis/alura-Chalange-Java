@@ -73,7 +73,7 @@ public class DepoimentoService {
 
     public Depoimento createDepoimento(DepoimentosRequestDTO dto) throws IOException {
         String fotourl = "";
-        if (!dto.foto().isEmpty()) {
+        if (dto.foto() != null && !dto.foto().isEmpty()) {
             fotourl = s3Service.uploadFile(dto.foto());
         }
         var destino =

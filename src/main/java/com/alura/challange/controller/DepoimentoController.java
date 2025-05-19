@@ -1,15 +1,14 @@
 package com.alura.challange.controller;
 
-import com.alura.challange.model.Depoimento;
 import com.alura.challange.records.DepoimentosDTO;
 import com.alura.challange.records.DepoimentosRequestDTO;
 import com.alura.challange.records.DepoimentosUpdateDTO;
 import com.alura.challange.service.DepoimentoService;
-import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -44,20 +43,33 @@ public class DepoimentoController {
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
-    public ResponseEntity updateDepoimento(@ModelAttribute @Valid DepoimentosUpdateDTO depoimento) {
-        var depoimentoUpdated = depoimentoService.updateDepoimento(depoimento);
+    public ResponseEntity updateDepoimento(
+            @RequestParam("id") Long id,
+            @RequestParam(value = "foto", required = false) MultipartFile foto,
+            @RequestParam(value = "depoimento", required = false) String depoimento,
+            @RequestParam(value = "autor", required = false) String autor,
+            @RequestParam(value = "destinoId", required = false) Long destinoId
+    ) {
+        var depoimentoDTO = new DepoimentosUpdateDTO(id, foto, depoimento, autor, destinoId);
+
+        var depoimentoUpdated = depoimentoService.updateDepoimento(depoimentoDTO);
         return ResponseEntity.ok(new DepoimentosDTO(depoimentoUpdated));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
-    public ResponseEntity createDepoimento(@ModelAttribute @Valid DepoimentosRequestDTO depoimento,
-                                           UriComponentsBuilder uriComponentsBuilder) throws IOException {
+    public ResponseEntity createDepoimento(
+            @RequestParam(value = "foto", required = false) MultipartFile foto,
+            @RequestParam(value = "depoimento", required = true) String depoimento,
+            @RequestParam("autor") String autor,
+            @RequestParam("destinoId") Long destinoId,
+            UriComponentsBuilder uriComponentsBuilder) throws IOException {
 
-        var newDepoimento = depoimentoService.createDepoimento(depoimento);
+                var depoimentoDTO  = new DepoimentosRequestDTO(foto,depoimento,autor,destinoId);
+
+        var newDepoimento = depoimentoService.createDepoimento(depoimentoDTO);
 
         var uri = uriComponentsBuilder.path("/depoimentos/{id}").buildAndExpand(newDepoimento.getId()).toUri();
-//        depoimentoService.createDepoimento(newDepoimento);
         return ResponseEntity.created(uri).body(new DepoimentosDTO(newDepoimento));
     }
 
