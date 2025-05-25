@@ -63,7 +63,7 @@ public class DestinoService {
 
         Destino destino = new Destino(destinosDTO);
 
-        if (dto.textoDescritivo().isEmpty()) {
+        if (dto.textoDescritivo() == null || dto.textoDescritivo().isEmpty()) {
             destino.setTextoDescritivo(aiService.generateDescription(destino.getNome()));
         }
 
